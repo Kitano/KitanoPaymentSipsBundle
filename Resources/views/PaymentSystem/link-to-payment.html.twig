@@ -1,0 +1,40 @@
+{% autoescape false %}
+<form action="{{ url('kitano_payment_sips_payment') }}" method="post">
+    <input type="hidden" name="date" value="{{ date }}"/>
+    <input type="hidden" name="amount" value="{{ amount }}"/>
+    <input type="hidden" name="orderId" value="{{ orderId }}"/>
+    <input type="hidden" name="transactionId" value="{{ transactionId }}"/>
+    <input type="hidden" name="notification_url" value="{{ notificationUrl }}"/>
+    <input type="hidden" name="return_url_ok" value="{{ returnUrlOk }}"/>
+    <input type="hidden" name="return_url_err" value="{{ returnUrlErr }}"/>
+    <input type="hidden" name="mode" value="accept"/>
+
+    <input type="submit" value="{{ submitLabel|default('Accept Payment') }}"/>
+</form>
+
+<form action="{{ url('kitano_payment_sips_payment') }}" method="post">
+    <input type="hidden" name="date" value="{{ date }}"/>
+    <input type="hidden" name="amount" value="{{ amount }}"/>
+    <input type="hidden" name="orderId" value="{{ orderId }}"/>
+    <input type="hidden" name="transactionId" value="{{ transactionId }}"/>
+    <input type="hidden" name="notification_url" value="{{ notificationUrl }}"/>
+    <input type="hidden" name="return_url_ok" value="{{ returnUrlOk }}"/>
+    <input type="hidden" name="return_url_err" value="{{ returnUrlErr }}"/>
+    <input type="hidden" name="mode" value="refuse"/>
+
+    <input type="submit" value="{{ submitLabel|default('Refuse Payment') }}"/>
+</form>
+
+<form action="{{ url('kitano_payment_sips_payment') }}" method="post">
+    <input type="hidden" name="date" value="{{ date }}"/>
+    <input type="hidden" name="amount" value="{{ amount }}"/>
+    <input type="hidden" name="orderId" value="{{ orderId }}"/>
+    <input type="hidden" name="transactionId" value="{{ transactionId }}"/>
+    <input type="hidden" name="notification_url" value="{{ notificationUrl }}"/>
+    <input type="hidden" name="return_url_ok" value="{{ returnUrlOk }}"/>
+    <input type="hidden" name="return_url_err" value="{{ returnUrlErr }}"/>
+    <input type="hidden" name="mode" value="error"/>
+
+    <input type="submit" value="{{ submitLabel|default('Send Payment error') }}"/>
+</form>
+{% endautoescape %}
