@@ -7,6 +7,7 @@ use Kitano\PaymentBundle\Model\Transaction;
 use Kitano\PaymentBundle\KitanoPaymentEvents;
 use Kitano\PaymentBundle\Repository\TransactionRepositoryInterface;
 use Kitano\PaymentBundle\PaymentException;
+use Kitano\PaymentBundle\PaymentSystem\HandlePaymentResponse;
 
 
 use Symfony\Component\HttpFoundation\Request;
@@ -200,7 +201,8 @@ class SipsPaymentSystem
     public function handleBackToShop(Request $request)
     {
         $transaction = $this->handleSipsRequest($request);
-        return new RedirectResponse($this->externalBackToShopUrl.'?transactionId='.$transaction->getId(), "302");
+        $response = new RedirectResponse($this->externalBackToShopUrl.'?transactionId='.$transaction->getId(), "302");
+        return new HandlePaymentResponse($transaction, $response);
     }
 
     /**
@@ -209,7 +211,8 @@ class SipsPaymentSystem
     public function handlePaymentNotification(Request $request)
     {
         $transaction = $this->handleSipsRequest($request);
-        return new Response('OK');
+        $response = new Response('OK');
+        return new HandlePaymentResponse($transaction, $response);
     }
 
     /**
