@@ -30,13 +30,23 @@ class KitanoPaymentSipsExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        foreach (array('payment_system') as $basename) {
+        foreach (array('service') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
         }
 
         $this->remapParametersNamespaces($config['config'], $container, array(
             ''    => 'kitano_payment_sips.config.%s',
         ));
+        $this->remapParametersNamespaces($config['bin'], $container, array(
+            ''    => 'kitano_payment_sips.bin.%s',
+        ));
+        $this->remapParameters($config, $container, array(
+            'bin'  => 'kitano_payment_sips.bin'
+        ));
+        $this->remapParameters($config, $container, array(
+            'config'  => 'kitano_payment_sips.config'
+        ));
+
     }
 
     /**

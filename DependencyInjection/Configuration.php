@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('kitano_payment_sips');
 
         $this->addConfigSection($rootNode);
+        $this->addBinSection($rootNode);
 
         return $treeBuilder;
     }
@@ -45,10 +46,35 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('config')
                     ->children()
-                        ->scalarNode('base_url')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('return_url_ok')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('return_url_err')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('notification_url')->defaultValue(null)->end()
+                        ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('merchant_country')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('pathfile')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('default_language')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('default_teplate_file')->defaultValue(null)->end()
+                        ->scalarNode('default_currency')->cannotBeEmpty()->defaultValue(978)->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Parses the kitano_payment_sips config section
+     * Example for yaml driver:
+     * kitano_payment_sips:
+     *     config:
+     *         base_url:
+     *
+     * @param ArrayNodeDefinition $node
+     * @return void
+     */
+    private function addBinSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('bin')
+                    ->children()
+                        ->scalarNode('request_bin')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('response_bin')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end();

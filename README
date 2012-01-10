@@ -1,0 +1,75 @@
+KitanoPaymentSipsBundle
+=======================
+
+This bundle is used to manage SIPS payment system with the KitanoPaymentBundle.
+Kitano is just a namespace for bundles created by Kitpages (http://www.kitpages.fr) and Anonymation (www.anonymation.com).
+
+Author : Philippe Le Van (@plv)
+
+Installation
+============
+
+Install SIPS files
+------------------
+create a directory app/config/sips
+
+untar the plugin archive into this directory. You should get the files
+
+app/config/sips/bin
+app/config/sips/logo
+app/config/sips/param
+app/config/sips/sample
+app/config/sips/Version.txt
+
+Install SIPS certificate
+------------------------
+copy your certificate into app/config/sips/param
+Ex app/config/sips/param/certif.fr.011223344551111
+
+Change the configuration in config.yml
+--------------------------------------
+parameters:
+    payment.service:  "kitano_payment_fake.payment_system.fake"
+
+kitano_payment:
+    service:
+        payment_system: %payment.service%
+
+kitano_payment_fake:
+    config:
+        base_url: %payment_fake.base_url%
+        return_url_ok: %base_url%/shop/backToShopOk
+        return_url_err: %base_url%/shop/backToShopErr
+        notification_url: %base_url%/payment/kitano_payment/payment/notification
+
+kitano_payment_sips:
+    config:
+        merchant_id: 011223344551111
+        merchant_country: fr
+        normal_return_url: %base_url%/shop/backToShop
+        cancel_return_url: %base_url%/shop/backToShop
+        automatic_response_url: %base_url%/payment/kitano_payment/payment/notification
+        pathfile: "%kernel.root_dir%/config/sips/param/pathfile"
+        default_language: en
+        default_teplate_file: ~
+        default_currency_code: 978
+    bin:
+        request_bin: "%kernel.root_dir%/config/sips/bin/static/request"
+        response_bin: "%kernel.root_dir%/config/sips/bin/static/response"
+
+Add things in deps
+------------------
+[KitanoPaymentBundle]
+    git=http://github.com/Kitano/KitanoPaymentBundle.git
+    target=/Kitano/PaymentBundle
+    version=origin/master
+
+[KitanoPaymentSipsBundle]
+    git=http://github.com/Kitano/KitanoPaymentSipsBundle.git
+    target=/Kitano/PaymentSipsBundle
+    version=origin/master
+
+[KitanoPaymentFakeBundle]
+    git=http://github.com/Kitano/KitanoPaymentFakeBundle.git
+    target=/Kitano/PaymentFakeBundle
+    version=origin/master
