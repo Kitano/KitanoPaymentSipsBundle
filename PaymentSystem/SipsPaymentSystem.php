@@ -183,7 +183,7 @@ class SipsPaymentSystem
         if ( ( $code != 0 ) || ($response_code != "00") ) {
             $transaction->setState(Transaction::STATE_REFUSED);
             $transaction->setSuccess(true);
-            $transaction->setExtraData($request->all());
+            $transaction->setExtraData($request->request->all());
             $this->transactionRepository->save($transaction);
             return $transaction;
         }
