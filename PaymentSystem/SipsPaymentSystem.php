@@ -65,6 +65,9 @@ class SipsPaymentSystem
         $params["order_id"] = $transaction->getOrderId();
         $params["currency_code"] = $this->getCurrencySipsCode($this->config["default_currency"]);
         $params["pathfile"] = $this->config["pathfile"];
+        if ($this->config["templatefile"]) {
+            $params["templatefile"] = $this->config["templatefile"];
+        }
         $params["normal_return_url"] = $this->internalBackToShopUrl;
         $params["cancel_return_url"] = $this->internalBackToShopUrl;
         $params["automatic_response_url"] = $this->notificationUrl;
@@ -179,16 +182,24 @@ class SipsPaymentSystem
         if ($transaction->getState() != Transaction::STATE_NEW) {
             return $transaction;
         }
+        // payment approved
+        if ( ( $code == 0 ) && ($response_code == "00") ) {
+            $transaction->setState(Transaction::STATE_APPROVED);
+            $transaction->setSuccess(true);
+            $transaction->setExtraData($request->request->all());
+            $this->transactionRepository->save($transaction);
+            return $transaction;
+        }
         // payment refused
-        if ( ( $code != 0 ) || ($response_code != "00") ) {
-            $transaction->setState(Transaction::STATE_REFUSED);
+        if ( ( $code == 0 ) || ($response_code == "17") ) {
+            $transaction->setState(Transaction::STATE_CANCELED_BY_USER);
             $transaction->setSuccess(true);
             $transaction->setExtraData($request->request->all());
             $this->transactionRepository->save($transaction);
             return $transaction;
         }
         // payment accepted
-        $transaction->setState(Transaction::STATE_APPROVED);
+        $transaction->setState(Transaction::STATE_REFUSED);
         $transaction->setSuccess(true);
         $transaction->setExtraData($request->request->all());
         $this->transactionRepository->save($transaction);
@@ -201,7 +212,7 @@ class SipsPaymentSystem
     public function handleBackToShop(Request $request)
     {
         $transaction = $this->handleSipsRequest($request);
-        $response = new RedirectResponse($this->externalBackToShopUrl.'?transactionId='.$transaction->getId(), "302");
+        $response = new RedirectResponse($this->externalBackToShopUrl.'?transactionId='.$transaction->getId().'&orderId='.$transaction->getOrderId(), "302");
         return new HandlePaymentResponse($transaction, $response);
     }
 

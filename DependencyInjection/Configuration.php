@@ -49,6 +49,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('merchant_id')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('merchant_country')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('pathfile')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('templatefile')->defaultValue(null)->end()
                         ->scalarNode('default_language')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('default_teplate_file')->defaultValue(null)->end()
                         ->scalarNode('default_currency')->cannotBeEmpty()->defaultValue(978)->end()
