@@ -83,12 +83,17 @@ class SipsPaymentSystem
             throw new PaymentException("file '$requestBin' doesn't exists, can't generate html button");
         }
         $this->logger->info("Execute SIPS request : $requestBin $paramString");
-        $result = exec(escapeshellcmd($requestBin).' '.$paramString);
+        exec(escapeshellcmd($requestBin).' '.$paramString, $output);
+        // hack because sometimes, response is returned on 2 lines
+        $result = "";
+        foreach ($output as $line) {
+            $result .= $line;
+        }
 
         $tableau = explode ("!", "$result");
         $sipsCode = $tableau[1];
         $sipsError = $tableau[2];
-        $sipsMessage = $tableau[3];
+        $this->logger->debug("SIPS request result=$result");
 
         if (( $sipsCode == "" ) && ( $sipsError == "" ) ) {
             throw new PaymentException("call to $requestBin failed, result=".$result);
@@ -96,6 +101,11 @@ class SipsPaymentSystem
         elseif ($sipsCode != 0) {
             throw new PaymentException("SIPS returns the following error: \n $sipsError");
         }
+
+        if (!array_key_exists(3, $tableau)) {
+            throw new PaymentException("SIPS, no third parameter returned by SIPS. \n result=$result \n sipsError=$sipsError");
+        }
+        $sipsMessage = $tableau[3];
 
         return $sipsMessage;
     }
