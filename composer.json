@@ -1,0 +1,22 @@
+{
+    "name": "kitano/payment-sips-bundle",
+    "description": "SIPS payment system driver for kitano/payment-bundle.",
+    "keywords": ["payment","sips"],
+    "homepage": "http://github.com/Kitano/KitanoPaymentSipsBundle",
+    "type": "symfony-bundle",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Philippe Levan",
+            "email": "philippe.levan@kitpages.fr",
+            "homepage": "http://www.kitpages.fr"
+        }
+    ],
+    "require": {
+        "kitano/payment-bundle": "master-dev"
+    },
+    "autoload": {
+        "psr-0": { "Kitano\\PaymentSipsBundle": "" }
+    },
+    "target-dir": "Kitano/PaymentSipsBundle"
+}
