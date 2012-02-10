@@ -3,7 +3,7 @@
 namespace Kitano\PaymentSipsBundle\PaymentSystem;
 
 use Kitano\PaymentBundle\PaymentSystem\SimpleCreditCardInterface;
-use Kitano\PaymentBundle\Model\Transaction;
+use Kitano\PaymentBundle\Entity\Transaction;
 use Kitano\PaymentBundle\KitanoPaymentEvents;
 use Kitano\PaymentBundle\Repository\TransactionRepositoryInterface;
 use Kitano\PaymentBundle\PaymentException;
