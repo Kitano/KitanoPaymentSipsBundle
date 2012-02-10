@@ -60,7 +60,7 @@ class SipsPaymentSystem
         $params["merchant_id"] = $this->config["merchant_id"];
         $params["merchant_country"] = $this->config["merchant_country"];
         $params["amount"] = round($transaction->getAmount() * 100);
-        $params["language"] = $this->config["default_language"];;
+        $params["language"] = $this->getSipsLanguageFromLocale($transaction->getLocale());
         $params["transaction_id"] = $this->getSipsTransactionId($transaction);
         $params["order_id"] = $transaction->getOrderId();
         $params["currency_code"] = $this->getCurrencySipsCode($this->config["default_currency"]);
@@ -236,6 +236,19 @@ class SipsPaymentSystem
         return new HandlePaymentResponse($transaction, $response);
     }
 
+
+    protected function getSipsLanguageFromLocale($locale)
+    {
+        if (!is_string($locale)) {
+            $locale = $this->config["default_language"];
+        }
+        $tab = explode("_", $locale);
+        $language = strtolower($tab[0]);
+        if (!in_array($language, array("fr", "ge", "en", "sp", "it"))) {
+            $language = $this->config["default_language"];
+        }
+        return $language;
+    }
     /**
      * return an sips currency code from a currency iso name
      * @param string $currencyIso
