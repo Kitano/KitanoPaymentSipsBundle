@@ -13,10 +13,15 @@
         }
     ],
     "require": {
-        "kitano/payment-bundle": "master-dev"
+        "kitano/payment-bundle": "~2.0"
     },
     "autoload": {
         "psr-0": { "Kitano\\PaymentSipsBundle": "" }
     },
-    "target-dir": "Kitano/PaymentSipsBundle"
+    "target-dir": "Kitano/PaymentSipsBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
