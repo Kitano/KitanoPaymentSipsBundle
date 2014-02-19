@@ -196,7 +196,7 @@ class SipsPaymentSystem
         if ( ( $code == 0 ) && ($response_code == "00") ) {
             $transaction->setState(Transaction::STATE_APPROVED);
             $transaction->setSuccess(true);
-            $transaction->setExtraData($request->request->all());
+            $transaction->setExtraData(array_merge($transaction->getExtraData(), $request->request->all()));
             $this->transactionRepository->save($transaction);
             return $transaction;
         }
@@ -204,14 +204,14 @@ class SipsPaymentSystem
         if ( ( $code == 0 ) || ($response_code == "17") ) {
             $transaction->setState(Transaction::STATE_CANCELED_BY_USER);
             $transaction->setSuccess(true);
-            $transaction->setExtraData($request->request->all());
+            $transaction->setExtraData(array_merge($transaction->getExtraData(), $request->request->all()));
             $this->transactionRepository->save($transaction);
             return $transaction;
         }
         // payment accepted
         $transaction->setState(Transaction::STATE_REFUSED);
         $transaction->setSuccess(true);
-        $transaction->setExtraData($request->request->all());
+        $transaction->setExtraData(array_merge($transaction->getExtraData(), $request->request->all()));
         $this->transactionRepository->save($transaction);
         return $transaction;
     }
